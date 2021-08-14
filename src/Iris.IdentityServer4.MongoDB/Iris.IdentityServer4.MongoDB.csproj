@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <PackOnBuild>true</PackOnBuild>
+    <Authors>Stewart Mbofana</Authors>
+    <Copyright>Ringier South Africa</Copyright>
+    <PackageLicenseUrl>https://github.com/stewartm83/rimu-meta-eu1-iris/blob/main/LICENSE</PackageLicenseUrl>
+    <Owners>Ringier South Africa</Owners>
+    <PackageProjectUrl>https://github.com/stewartm83/rimu-meta-eu1-iris</PackageProjectUrl>
+    <Summary>A Mongo DB adapter for Identity Server </Summary>
+    <Title>Meta Developers</Title>
+    <Description>A Mongo DB adapter for Identity Server </Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="IdentityServer4" Version="4.1.2" />
+    <PackageReference Include="MongoDB.Driver" Version="2.13.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Services\" />
+  </ItemGroup>
+</Project>
