@@ -1,24 +1,24 @@
 ﻿
 using System;
+using Iris.IdentityServer4.MongoDB.Options;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 
-namespace Iris.IdentityServer4.MongoDB.Stores
+namespace Iris.IdentityServer4.MongoDB.Contexts
 {
     public abstract class MongoDbContextBase
     {
         protected static IMongoClient _client;
         protected static IMongoDatabase _database;
 
-        private readonly IOptions<MongoDbContextOptions> _options;
+        private readonly IOptions<MongoDbStoreOptions> _options;
 
-        public MongoDbContextBase(IOptions<MongoDbContextOptions> options)
+        public MongoDbContextBase(IOptions<MongoDbStoreOptions> options)
         {
             _options = options
                 ?? throw new ArgumentNullException(nameof(options));
-            
-            _client = GetMongoClient(_options.Value.MongoConnectionString);
-            _database = _client.GetDatabase(options.Value.MongoDatabase);
+            _client = GetMongoClient(_options.Value.ConnectionString);
+            _database = _client.GetDatabase(options.Value.Database);
         }
 
         private MongoClient GetMongoClient(string connectionString)

@@ -15,10 +15,10 @@
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <OutputPath>..\..\build\bin\Debug</OutputPath>
+    <OutputPath>..\..\build\bin\Debug\netcoreapp3.1\netcoreapp3.1\netcoreapp3.1</OutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <OutputPath>..\..\build\bin\Release</OutputPath>
+    <OutputPath>..\..\build\bin\Release\netcoreapp3.1\netcoreapp3.1\netcoreapp3.1</OutputPath>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="IdentityServer4" Version="4.1.2" />

@@ -6,6 +6,7 @@ using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using IdentityServer4.Stores;
 using IdentityServer4.Models;
+using Iris.IdentityServer4.MongoDB.Contexts;
 
 namespace Iris.IdentityServer4.MongoDB.Stores
 {

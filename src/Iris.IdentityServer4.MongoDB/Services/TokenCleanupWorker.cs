@@ -4,6 +4,9 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Hosting;
 using System.Threading;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+using Iris.IdentityServer4.MongoDB.Stores;
+using Iris.IdentityServer4.MongoDB.Options;
 
 namespace Iris.IdentityServer4.MongoDB.Services
 {
@@ -13,8 +16,8 @@ namespace Iris.IdentityServer4.MongoDB.Services
     public class TokenCleanupWorker : BackgroundService
     {
         private readonly IServiceProvider _serviceProvider;
+        private readonly IOptions<MongoDbStoreOptions> _options;
         private readonly ILogger<TokenCleanupWorker> _logger;
-        public int CleanupInterval = 3600;
 
         /// <summary>
         /// TokenCleanupWorker
@@ -23,10 +26,13 @@ namespace Iris.IdentityServer4.MongoDB.Services
         /// <param name="logger"></param>
         public TokenCleanupWorker(
             IServiceProvider serviceProvider,
+            IOptions<MongoDbStoreOptions> options,
             ILogger<TokenCleanupWorker> logger)
         {
             _serviceProvider = serviceProvider
                 ?? throw new ArgumentNullException(nameof(serviceProvider));
+            _options = options
+                ?? throw new ArgumentNullException(nameof(options));
             _logger = logger;
         }
 
@@ -36,7 +42,7 @@ namespace Iris.IdentityServer4.MongoDB.Services
             {
                 try
                 {
-                    await Task.Delay(CleanupInterval, stoppingToken);
+                    await Task.Delay(_options.Value.TokenCleanupInterval, stoppingToken);
                 }
                 catch (TaskCanceledException)
                 {

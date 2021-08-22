@@ -1,7 +1,10 @@
-﻿namespace Iris.IdentityServer4.MongoDB.Services
+namespace Iris.IdentityServer4.MongoDB.Options
 {
-    public class TokenCleanupOptions
+    public class MongoDbStoreOptions
     {
+        public string ConnectionString { get; set; }
+        public string Database { get; set; } = "identity";
+
         /// <summary>
         /// Gets or sets a value indicating whether stale entries will be automatically cleaned up from the database.
         /// This is implemented by periodically connecting to the database (according to the TokenCleanupInterval) from the hosting application.
@@ -20,6 +23,4 @@
         /// </value>
         public int TokenCleanupInterval { get; set; } = 3600;
     }
-
-
 }

@@ -1,54 +1,40 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using IdentityServer4.Services;
 using IdentityServer4.Stores;
 using Iris.IdentityServer4.MongoDB.Stores;
 using Iris.IdentityServer4.MongoDB.Services;
+using System;
+using Iris.IdentityServer4.MongoDB.Options;
+using Iris.IdentityServer4.MongoDB.Contexts;
 
 namespace Iris.IdentityServer4.MongoDB
 {
     public static class IdentityServerMongoDbBuilderExtensions
     {
-        private static IIdentityServerBuilder AddConfigurationStore(
-            this IIdentityServerBuilder builder)
-        {
-            builder.Services.AddTransient<IClientStore, MongoDbClientStore>();
-            builder.Services.AddTransient<IResourceStore, MongoDbResourceStore>();
-            builder.Services.AddTransient<ICorsPolicyService, MongoDbCorsPolicyService>();
-
-            return builder;
-        }
-
-        public static IIdentityServerBuilder AddConfigurationStore(
+        public static IIdentityServerBuilder AddMongoDbStores(
             this IIdentityServerBuilder builder,
-            IConfiguration configuration)
+            Action<MongoDbStoreOptions> storeActionOptions)
         {
-            builder.Services.Configure<MongoDbContextOptions>(configuration.GetSection("MongoDbContextOptions"));
+            builder.Services.Configure<MongoDbStoreOptions>(storeActionOptions);
+            
             builder.Services.TryAddSingleton<MongoDbConfigurationContext>();
-
-            builder.AddConfigurationStore();
-
-            return builder;
-        }
-
-        // Operational Store
-        public static IIdentityServerBuilder AddOperationalStore(
-            this IIdentityServerBuilder builder,
-            IConfiguration configuration)
-        {
-            builder.Services.Configure<MongoDbContextOptions>(configuration.GetSection("MongoDbContextOptions"));
             builder.Services.TryAddSingleton<MongoDbPersistedGrantContext>();
 
-            builder.AddOperationalStore();
-            return builder;
-        }
+            // Add configuration stores
+            builder.AddClientStore<MongoDbClientStore>()
+                .AddCorsPolicyService<MongoDbCorsPolicyService>()
+                .AddResourceStore<MongoDbResourceStore>()
+                .AddInMemoryCaching()
+                .AddClientStoreCache<MongoDbClientStore>()
+                .AddCorsPolicyCache<MongoDbCorsPolicyService>()
+                .AddResourceStoreCache<MongoDbResourceStore>();
 
-        private static IIdentityServerBuilder AddOperationalStore(
-            this IIdentityServerBuilder builder)
-        {
+            // Add operational stores
             builder.Services.AddTransient<IPersistedGrantStore, MongoDbPersistedGrantStore>();
+            builder.Services.AddTransient<IDeviceFlowStore, MongoDbDeviceFlowStore>();
             builder.Services.AddSingleton<TokenCleanupService>();
+            builder.Services.AddHostedService<TokenCleanupWorker>();
 
             return builder;
         }
